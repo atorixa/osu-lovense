@@ -140,6 +140,7 @@ namespace osu.Game.Rulesets.Scoring
                     result.HitObject.GetEndTime() + result.TimeOffset,
                     GetHealthIncreaseFor(result)));
             }
+
         }
 
         protected override bool CheckDefaultFailCondition(JudgementResult result)

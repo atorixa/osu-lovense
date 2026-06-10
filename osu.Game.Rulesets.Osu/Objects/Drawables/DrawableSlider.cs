@@ -27,6 +27,10 @@ namespace osu.Game.Rulesets.Osu.Objects.Drawables
 {
     public partial class DrawableSlider : DrawableOsuHitObject
     {
+        private bool wasTracking;
+
+
+
         public new Slider HitObject => (Slider)base.HitObject;
 
         public new OsuSliderJudgementResult Result => (OsuSliderJudgementResult)base.Result;
@@ -252,6 +256,18 @@ namespace osu.Game.Rulesets.Osu.Objects.Drawables
                 else if (slidingSample.IsPlaying || slidingSample.RequestedPlaying)
                     slidingSample.Stop();
             }
+
+            if (Clock.IsRunning && Tracking.Value)
+            {
+                double progress = Math.Clamp((Time.Current - HitObject.StartTime) / HitObject.Duration, 0.0, 1.0);
+                Lovense?.UpdateSlider(progress);
+                wasTracking = true;
+            }
+            else if (wasTracking)
+            {
+                Lovense?.StopVibration();
+                wasTracking = false;
+            }
         }
 
         protected override void UpdateAfterChildren()
@@ -409,5 +425,13 @@ namespace osu.Game.Rulesets.Osu.Objects.Drawables
         }
 
         #endregion
+        protected override void Dispose(bool isDisposing)
+        {
+            if (wasTracking)
+                Lovense?.StopVibration();
+
+            base.Dispose(isDisposing);
+
+        }
     }
 }

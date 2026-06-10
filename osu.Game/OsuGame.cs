@@ -83,6 +83,7 @@ using osuTK.Graphics;
 using Sentry;
 using IntroScreen = osu.Game.Screens.Menu.IntroScreen;
 using MatchType = osu.Game.Online.Rooms.MatchType;
+using osu.Game.Lovense;
 
 namespace osu.Game
 {
@@ -93,6 +94,8 @@ namespace osu.Game
     [Cached(typeof(OsuGame))]
     public partial class OsuGame : OsuGameBase, IKeyBindingHandler<GlobalAction>, ILocalUserPlayInfo, IPerformFromScreenRunner, IOverlayManager, ILinkHandler
     {
+        [Cached]
+        public readonly LovenseManager Lovense = new LovenseManager();
 #if DEBUG
         // Different port allows running release and debug builds alongside each other.
         public const string IPC_PIPE_NAME = "osu-lazer-debug";
@@ -1077,6 +1080,8 @@ namespace osu.Game
 
             MultiplayerClient.PostNotification = n => Notifications.Post(n);
             MultiplayerClient.PresentMatch = PresentMultiplayerMatch;
+
+            Add(Lovense);
 
             ScreenFooter.BackReceptor backReceptor;
 

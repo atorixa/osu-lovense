@@ -33,6 +33,10 @@ namespace osu.Game.Rulesets.Objects.Drawables
     [Cached(typeof(DrawableHitObject))]
     public abstract partial class DrawableHitObject : PoolableDrawableWithLifetime<HitObjectLifetimeEntry>, IAnimationTimeReference
     {
+
+        [Resolved(CanBeNull = true)]
+        protected osu.Game.Lovense.LovenseManager Lovense { get; private set; }
+
         /// <summary>
         /// Invoked after this <see cref="DrawableHitObject"/>'s applied <see cref="HitObject"/> has had its defaults applied.
         /// </summary>

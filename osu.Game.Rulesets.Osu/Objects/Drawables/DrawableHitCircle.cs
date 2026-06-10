@@ -26,6 +26,19 @@ namespace osu.Game.Rulesets.Osu.Objects.Drawables
 {
     public partial class DrawableHitCircle : DrawableOsuHitObject, IHasApproachCircle
     {
+
+        protected override void LoadComplete()
+        {
+            base.LoadComplete();
+            OnNewResult += (judgedObject, result) =>
+            {
+                if (result.IsHit && judgedObject == this)
+                {
+                    Lovense?.VibrateBriefly(durationMs: 100);
+                }
+            };
+        }
+
         public OsuAction? HitAction => HitArea.HitAction;
         protected virtual OsuSkinComponents CirclePieceComponent => OsuSkinComponents.HitCircle;
 

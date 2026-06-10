@@ -11,11 +11,16 @@ using osu.Game.Beatmaps;
 using osu.Game.Rulesets.Judgements;
 using osu.Game.Rulesets.Objects;
 using osu.Game.Rulesets.Replays;
+using osu.Game.Lovense;
+using osu.Framework.Allocation;
 
 namespace osu.Game.Rulesets.Scoring
 {
     public abstract partial class JudgementProcessor : Component
     {
+
+        [Resolved(CanBeNull = true)]
+        private LovenseManager lovense { get; set; }
         /// <summary>
         /// Invoked when a new judgement has occurred. This occurs after the judgement has been processed by this <see cref="JudgementProcessor"/>.
         /// </summary>
@@ -78,7 +83,14 @@ namespace osu.Game.Rulesets.Scoring
             ApplyResultInternal(result);
 
             NewJudgement?.Invoke(result);
+
+            if (result.IsHit)
+            {
+                lovense?.VibrateBriefly();
+            }
         }
+
+
 
         /// <summary>
         /// Reverts the score change of a <see cref="JudgementResult"/> that was applied to this <see cref="ScoreProcessor"/>.

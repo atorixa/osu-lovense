@@ -28,6 +28,9 @@ namespace osu.Game.Rulesets.Osu.Objects.Drawables
 {
     public partial class DrawableSpinner : DrawableOsuHitObject
     {
+        private bool wasSpinning;
+
+
         public new Spinner HitObject => (Spinner)base.HitObject;
 
         public new OsuSpinnerJudgementResult Result => (OsuSpinnerJudgementResult)base.Result;
@@ -299,6 +302,48 @@ namespace osu.Game.Rulesets.Osu.Objects.Drawables
             // See default `LifetimeStart` as set in `DrawableSpinnerTick`.
             if (nextTick?.LifetimeStart == double.MaxValue)
                 nextTick.LifetimeStart = HitObject.StartTime;
+
+            if (Time.Current >= HitObject.StartTime && Time.Current <= HitObject.EndTime && Result?.HasResult != true)
+            {
+                double currentRpm = Math.Clamp(Progress * 400.0, 0, 400.0);
+
+                if (currentRpm > 10)
+                {
+                    Lovense?.UpdateSpinner(currentRpm);
+                    wasSpinning = true;
+                }
+                else if (wasSpinning)
+                {
+                    Lovense?.StopVibration();
+                    wasSpinning = false;
+                }
+            }
+            else if (wasSpinning)
+            {
+                Lovense?.StopVibration();
+                wasSpinning = false;
+            }
+
+            if (Clock.IsRunning && Time.Current >= HitObject.StartTime && Time.Current <= HitObject.EndTime && Result?.HasResult != true)
+            {
+                double currentRpm = SpinsPerMinute.Value;
+
+                if (currentRpm > 10)
+                {
+                    Lovense?.UpdateSpinner(currentRpm);
+                    wasSpinning = true;
+                }
+                else if (wasSpinning)
+                {
+                    Lovense?.StopVibration();
+                    wasSpinning = false;
+                }
+            }
+            else if (wasSpinning)
+            {
+                Lovense?.StopVibration();
+                wasSpinning = false;
+            }
         }
 
         private bool correctButtonPressed()
@@ -383,6 +428,11 @@ namespace osu.Game.Rulesets.Osu.Objects.Drawables
 
             {
             }
+        }
+              protected override void Dispose(bool isDisposing)
+              { if (wasSpinning)
+                      Lovense?.StopVibration();
+                       base.Dispose(isDisposing);
         }
     }
 }

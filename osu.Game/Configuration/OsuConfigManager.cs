@@ -162,6 +162,12 @@ namespace osu.Game.Configuration
             SetDefault(OsuSetting.IncreaseFirstObjectVisibility, true);
             SetDefault(OsuSetting.GameplayDisableWinKey, true);
 
+            //Lovense
+            SetDefault(OsuSetting.LovenseEnabled, false);
+            SetDefault(OsuSetting.LovenseEnabled, false);
+            SetDefault(OsuSetting.IntifaceUrl, string.Empty);
+            SetDefault(OsuSetting.LovenseIntensity, 25, 0, 100);
+
             // Update
             SetDefault(OsuSetting.ReleaseStream, ReleaseStream.Lazer);
 
@@ -352,6 +358,12 @@ namespace osu.Game.Configuration
         MouseDisableButtons,
         MouseDisableWheel,
         ConfineMouseMode,
+
+
+        ///FUCKED BUTTPLUG
+        LovenseEnabled,
+        IntifaceUrl,
+        LovenseIntensity,
 
         /// <summary>
         /// Globally applied audio offset.
