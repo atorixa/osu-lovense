@@ -167,6 +167,8 @@ namespace osu.Game.Configuration
             SetDefault(OsuSetting.LovenseEnabled, false);
             SetDefault(OsuSetting.IntifaceUrl, string.Empty);
             SetDefault(OsuSetting.LovenseIntensity, 25, 0, 100);
+            SetDefault(OsuSetting.LovenseDeviceIndex, 0, 0, 10);
+
 
             // Update
             SetDefault(OsuSetting.ReleaseStream, ReleaseStream.Lazer);
@@ -364,6 +366,8 @@ namespace osu.Game.Configuration
         LovenseEnabled,
         IntifaceUrl,
         LovenseIntensity,
+        LovenseDeviceIndex,
+
 
         /// <summary>
         /// Globally applied audio offset.

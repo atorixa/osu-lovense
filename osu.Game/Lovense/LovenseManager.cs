@@ -17,6 +17,7 @@ namespace osu.Game.Lovense
         private readonly Bindable<bool> isEnabled = new Bindable<bool>();
         private readonly Bindable<string> apiUrl = new Bindable<string>();
         private readonly Bindable<int> baseIntensity = new Bindable<int>();
+        private readonly Bindable<int> deviceIndex = new Bindable<int>();
 
         private ClientWebSocket ws;
         private CancellationTokenSource cts;
@@ -37,12 +38,23 @@ namespace osu.Game.Lovense
             config.BindWith(OsuSetting.IntifaceUrl, apiUrl);
             config.BindWith(OsuSetting.LovenseIntensity, baseIntensity);
 
+            config.BindWith(OsuSetting.LovenseDeviceIndex, deviceIndex);
+
             isEnabled.BindValueChanged(e =>
             {
                 if (e.NewValue)
                     _ = connectAsync();
                 else
                     disconnect();
+            });
+
+            deviceIndex.BindValueChanged(e =>
+            {
+                if (isEnabled.Value && ws != null && ws.State == WebSocketState.Open)
+                {
+                    string stopCmd = $"[{{\"ScalarCmd\":{{\"Id\":{GetNextId()},\"DeviceIndex\":{e.OldValue},\"Scalars\":[{{\"Index\":0,\"Scalar\":0.0,\"ActuatorType\":\"Vibrate\"}}]}}}}]";
+                    _ = sendRawJson(stopCmd);
+                }
             });
 
             if (isEnabled.Value)
@@ -172,8 +184,7 @@ namespace osu.Game.Lovense
             }
 
             string intensityString = intensity.ToString(System.Globalization.CultureInfo.InvariantCulture);
-            string cmd = $"[{{\"ScalarCmd\":{{\"Id\":{GetNextId()},\"DeviceIndex\":0,\"Scalars\":[{{\"Index\":0,\"Scalar\":{intensityString},\"ActuatorType\":\"Vibrate\"}}]}}}}]";
-
+            string cmd = $"[{{\"ScalarCmd\":{{\"Id\":{GetNextId()},\"DeviceIndex\":{deviceIndex.Value},\"Scalars\":[{{\"Index\":0,\"Scalar\":{intensityString},\"ActuatorType\":\"Vibrate\"}}]}}}}]";
             await sendRawJson(cmd);
         }
 

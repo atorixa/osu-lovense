@@ -25,26 +25,20 @@ namespace osu.Game.Overlays.Settings.Sections.Lovense
 
                 new Container
                 {
-                    RelativeSizeAxes = Axes.X,
-                    AutoSizeAxes = Axes.Y,
-                    Masking = true,
-                    CornerRadius = 8,
-                    Margin = new MarginPadding { Bottom = 10 },
-                    Children = new Drawable[]
+                RelativeSizeAxes = Axes.X,
+                AutoSizeAxes = Axes.Y,
+                Masking = true,
+                CornerRadius = 8,
+                Margin = new MarginPadding { Bottom = 10 },
+                Children = new Drawable[]
+                {
+                    new Box { RelativeSizeAxes = Axes.Both, Colour = Colour4.FromHex("#5E4D79") },
+                    new OsuTextFlowContainer(cp => cp.Font = OsuFont.Default.With(weight: FontWeight.SemiBold))
                     {
-                        new Box
-                        {
-                            RelativeSizeAxes = Axes.Both,
-                            Colour = Colour4.FromHex("#5E4D79")
-                        },
-                        new OsuTextFlowContainer(cp => cp.Font = OsuFont.Default.With(weight: FontWeight.SemiBold))
-                        {
-                            RelativeSizeAxes = Axes.X,
-                            AutoSizeAxes = Axes.Y,
-                            Padding = new MarginPadding(15),
-                            Text = "Integration - made with <3 by atorixa"
-                        }
+                        RelativeSizeAxes = Axes.X, AutoSizeAxes = Axes.Y, Padding = new MarginPadding(15),
+                        Text = "Integration - made with <3 by atorixa"
                     }
+                }
                 },
 
                 new SettingsItemV2(new FormCheckBox
@@ -58,13 +52,24 @@ namespace osu.Game.Overlays.Settings.Sections.Lovense
                     Caption = "Intiface websocket URL",
                     Current = config.GetBindable<string>(lookup: OsuSetting.IntifaceUrl)
                 }),
+
+                new SettingsItemV2(new FormSliderBar<int>
+                {
+                    Caption = "Device Index (0 = default)",
+                    Current = config.GetBindable<int>(lookup: OsuSetting.LovenseDeviceIndex),
+                    KeyboardStep = 1
+                }),
+
                 new SettingsItemV2(new FormSliderBar<int>
                 {
                     Caption = "Vibration intensity",
                     Current = config.GetBindable<int>(lookup: OsuSetting.LovenseIntensity),
                     KeyboardStep = 1
                 })
+                };
+                }
+
             };
         }
-    }
-}
+
+
